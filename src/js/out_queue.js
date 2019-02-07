@@ -119,6 +119,8 @@
 				if (!executingQueue) {
 					executeQueue();
 				}
+				// Any subsequent events (during beforeunload / unload) should be sent immediately so they don't get buffered and ignored
+				bufferSize = 1;
 			});
 		}
 
