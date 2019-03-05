@@ -259,6 +259,7 @@
 
 		// initialize the Snowplow singleton
 		helpers.addEventListener(windowAlias, 'beforeunload', beforeUnloadHandler, false);
+		helpers.addEventListener(windowAlias, 'pagehide', beforeUnloadHandler, false);
 		addReadyListener();
 
 		// Now replace initialization array with queue manager object
