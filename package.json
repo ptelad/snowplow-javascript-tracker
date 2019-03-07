@@ -37,6 +37,11 @@
     "type": "git",
     "url": "https://github.com/snowplow/snowplow-javascript-tracker.git"
   },
+  "scripts": {
+    "build": "grunt",
+    "prepare": "npm run build"
+  },
+  "main": "dist/bundle-postbabel",
   "bugs": "https://github.com/snowplow/snowplow-javascript-tracker/issues",
   "keywords": [
     "tracking",
