@@ -45,11 +45,11 @@
     // We need to "unlock" the connection again when we return and the tab is visible
     document.addEventListener('visibilitychange', function () {
         if (!document.hidden) {
-            doUnlockBeacon();
+            unlockBeacon();
         }
     });
 
-    object.unlockBeacon = function unlockBeacon(_collectorUrl) {
+    function unlockBeacon(_collectorUrl) {
         // We get passed collectorUrl as soon as we have the URL
         if (_collectorUrl) {
             collectorUrl = _collectorUrl;
@@ -71,5 +71,7 @@
         xhr.withCredentials = true;
         xhr.send('unlockBeacon');
     }
+
+    object.unlockBeacon = unlockBeacon;
 
 }());
