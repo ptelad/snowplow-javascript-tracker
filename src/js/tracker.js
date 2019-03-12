@@ -45,7 +45,6 @@
 		links = require('./links'),
 		forms = require('./forms'),
 		errors = require('./errors'),
-		beaconiOSWorkaround = require('./lib/beacon_ios_workaround'),
 		requestQueue = require('./out_queue'),
 		coreConstructor = require('snowplow-tracker-core').trackerCore,
 		productionize = require('./guard').productionize,
@@ -2139,7 +2138,6 @@
 		 */
 		apiMethods.setCollectorUrl = function (rawUrl) {
 			configCollectorUrl = asCollectorUrl(rawUrl);
-			beaconiOSWorkaround.unlockBeacon(configCollectorUrl);
 		};
 
 		/**

@@ -66,7 +66,7 @@
         // https://robertsahlin.com/analytics-beacon-transport-mechanism-gotchas/
         // https://bugs.webkit.org/show_bug.cgi?id=193508
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', collectorUrl + '/com.snowplowanalytics/tp2', true);
+        xhr.open('POST', collectorUrl, true);
         xhr.setRequestHeader('Content-Type', 'text/plain');
         xhr.withCredentials = true;
         xhr.send('unlockBeacon');

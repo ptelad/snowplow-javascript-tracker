@@ -39,6 +39,7 @@
 		isString = require('lodash/isString'),
 		map = require('lodash/map'),
 		localStorageAccessible = require('./lib/detectors').localStorageAccessible,
+		beaconiOSWorkaround = require('./lib/beacon_ios_workaround'),
 		helpers = require('./lib/helpers'),
 		object = typeof exports !== 'undefined' ? exports : this; // For eventual node.js environment support
 
@@ -314,6 +315,7 @@
 						}
 						const blob = new Blob([encloseInPayloadDataEnvelope(attachStmToEvent(batch))], headers);
 						try {
+							beaconiOSWorkaround.unlockBeacon(configCollectorUrl);
 							beaconStatus = navigator.sendBeacon(configCollectorUrl, blob);
 						}
 						catch(error) {
