@@ -41,7 +41,7 @@
     "build": "grunt",
     "prepare": "npm run build"
   },
-  "main": "dist/bundle-postbabel",
+  "main": "dist/snowplow",
   "bugs": "https://github.com/snowplow/snowplow-javascript-tracker/issues",
   "keywords": [
     "tracking",
