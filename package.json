@@ -1,6 +1,12 @@
 {
   "name": "snowplow-tracker",
   "version": "2.10.1",
+  "scripts": {
+    "build": "grunt",
+    "prepare": "npm run build",
+    "postinstall": "npm run prepare"
+  },
+  "main": "dist/snowplow",
   "dependencies": {
     "snowplow-tracker-core": "0.7.0",
     "browser-cookie-lite": "0.3.1",

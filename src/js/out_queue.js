@@ -39,6 +39,7 @@
 		isString = require('lodash/isString'),
 		map = require('lodash/map'),
 		localStorageAccessible = require('./lib/detectors').localStorageAccessible,
+		beaconiOSWorkaround = require('./lib/beacon_ios_workaround'),
 		helpers = require('./lib/helpers'),
 		object = typeof exports !== 'undefined' ? exports : this; // For eventual node.js environment support
 
@@ -68,12 +69,16 @@
 		
 		//Force to lower case if its a string
 		eventMethod = eventMethod.toLowerCase ? eventMethod.toLowerCase() : eventMethod;
-		
-		// Use the Beacon API if eventMethod is set null, true, or 'beacon'.
-		var isBeaconRequested = (eventMethod === null) || (eventMethod === true) || (eventMethod === "beacon") || (eventMethod === "true");
+
+		// Use the Beacon API if eventMethod is set null, true, or starts with 'beacon'.
+		var isBeaconRequested = (eventMethod === null) ||
+			(eventMethod === true) ||
+			(eventMethod.indexOf("beacon") === 0) ||
+			(eventMethod === "true");
 		// Fall back to POST or GET for browsers which don't support Beacon API
 		var isBeaconAvailable = Boolean(isBeaconRequested && navigator && navigator.sendBeacon);
 		var useBeacon = (isBeaconAvailable && isBeaconRequested);
+		var beaconTextPlain = eventMethod === 'beacon:text/plain'; // (dishonestly) set beacon headers to Content-Type: text/plain
 
 		// Use GET if specified
 		var isGetRequested = (eventMethod === "get");
@@ -115,6 +120,8 @@
 				if (!executingQueue) {
 					executeQueue();
 				}
+				// Any subsequent events (during beforeunload / unload) should be sent immediately so they don't get buffered and ignored
+				bufferSize = 1;
 			});
 		}
 
@@ -300,9 +307,15 @@
 					var beaconStatus;
 
 					if (useBeacon) {
-						const headers = { type: 'application/json' };
+						let headers = {};
+						if (beaconTextPlain) {
+							headers.type = 'text/plain';
+						} else {
+							headers.type = 'application/json';
+						}
 						const blob = new Blob([encloseInPayloadDataEnvelope(attachStmToEvent(batch))], headers);
 						try {
+							beaconiOSWorkaround.unlockBeacon(configCollectorUrl);
 							beaconStatus = navigator.sendBeacon(configCollectorUrl, blob);
 						}
 						catch(error) {
